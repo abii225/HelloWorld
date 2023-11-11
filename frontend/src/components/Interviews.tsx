@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 interface Course {
   id: number;
@@ -34,7 +35,7 @@ const Interviews = () => {
       <div key={course.id} className="border p-4 mb-4 rounded-md" style={{width:"20rem"}} >
         <h3 className="text-xl font-semibold">{course.title}</h3>
         <p>{course.description}</p>
-        <button className='startButton'>Start Interview</button>
+        <Link to="start_interview"><button className='startButton'>Start Interview</button></Link>
       </div>
     ));
   };
