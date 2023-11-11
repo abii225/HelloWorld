@@ -1,7 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { useToast } from "./custom/ToastProvider";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../redux/store";
+import axios from "axios";
+import {
+  POST_STARTINTERVIEW_ERROR,
+  POST_STARTINTERVIEW_LOADING,
+  POST_STARTINTERVIEW_SUCCESS,
+} from "../redux/interviewReducer/actionTypes";
 import {BsLaptop} from "react-icons/bs"
 import { Link } from 'react-router-dom';
-
 interface Course {
   id: number;
   title: string;
@@ -9,10 +17,46 @@ interface Course {
 }
 
 const Interviews = () => {
+  const toast = useToast();
+  const dispatch = useDispatch();
+  const isAuth: boolean = useSelector(
+    (store: RootState) => store.authReducer.isAuth
+  );
+  const token: String | null = useSelector(
+    (store: RootState) => store.authReducer.token
+  );
+  const loggedInUser = useSelector(
+    (store: RootState) => store.authReducer.loggedInUser
+  );
+  console.log(isAuth, token, loggedInUser, "Dashboard");
   const [selectedTab, setSelectedTab] = useState<number>(0);
 
   const handleTabChange = (index: number) => {
     setSelectedTab(index);
+  };
+
+  const startInterview = async (type: any, toast: any, navigate: any) => {
+    dispatch({ type: POST_STARTINTERVIEW_LOADING });
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/interview/start`,
+        type,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      // console.log(response, "LOGIN");
+      if (response.data) {
+        dispatch({ type: POST_STARTINTERVIEW_SUCCESS, payload: response.data });
+        toast("success", "Interview started successfully");
+      }
+    } catch (error) {
+      console.log(error);
+      dispatch({ type: POST_STARTINTERVIEW_ERROR });
+      toast("error", "Oops! Login failed!");
+    }
   };
 
   const allCourses: Course[] = [
@@ -24,18 +68,17 @@ const Interviews = () => {
     { id: 2, title: 'NEM 111', description: 'General' },
     { id: 2, title: 'NEM 111', description: 'General' },
     { id: 2, title: 'NEM 111', description: 'General' },
-   
     // Add more courses as needed
   ];
 
   const inProgressCourses: Course[] = [
-    { id: 3, title: '111', description: 'Description for Course 3' },
-    { id: 4, title: ' 111', description: 'Description for Course 4' },
+    { id: 3, title: "111", description: "Description for Course 3" },
+    { id: 4, title: " 111", description: "Description for Course 4" },
   ];
 
   const completedCourses: Course[] = [
-    { id: 5, title: 'ggg 111', description: 'Description for Course 5' },
-    { id: 6, title: 'NEM 111', description: 'Description for Course 6' },
+    { id: 5, title: "ggg 111", description: "Description for Course 5" },
+    { id: 6, title: "NEM 111", description: "Description for Course 6" },
   ];
 
   const renderCourseCards = (courses: Course[]) => {
@@ -51,9 +94,7 @@ const Interviews = () => {
           <div>10 min</div>
           <div >completed</div>
         </div>
-        <button className="startButton m-2">Start Interview</button>
         <Link to="start_interview"><button className='startButton'>Start Interview</button></Link>
-
       </div>
     ));
   };
@@ -74,7 +115,6 @@ const Interviews = () => {
               <div onClick={() => handleTabChange(2)}>Completed</div>
             </li>
           </ul>
-         
         </div>
 
         <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-3.5'>

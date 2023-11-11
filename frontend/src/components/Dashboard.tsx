@@ -1,14 +1,22 @@
-import React, { useState } from 'react';
-import Interviews from './Interviews';
-import About from './About';
+import React, { useState } from "react";
+import Interviews from "./Interviews";
+import About from "./About";
+
 
 const Dashboard: React.FC = () => {
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const [activeMenuItem, setActiveMenuItem] = useState<'roadmaps' | 'interviews'>('interviews');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [activeMenuItem, setActiveMenuItem] = useState<
+    "roadmaps" | "interviews"
+  >("interviews");
 
-    const toggleSidebar = () => {
-      setIsSidebarOpen((prevState) => !prevState);
-    };
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen((prevState) => !prevState);
+  };
+
+  const closeSidebar = () => {
+    setIsSidebarOpen((prevState) => !prevState);
+  };
 
     const closeSidebar = () => {
        setIsSidebarOpen(false);
@@ -44,8 +52,8 @@ const Dashboard: React.FC = () => {
       <aside
         id="default-sidebar"
         className={`fixed top-0 left-0 z-40 w-64 h-screen transition-transform ${
-            isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-          } sm:translate-x-0`}
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } sm:translate-x-0`}
         aria-label="Sidebar"
       >
         <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50">
@@ -74,8 +82,7 @@ const Dashboard: React.FC = () => {
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
                   viewBox="0 0 22 21"
-                >
-                </svg>
+                ></svg>
                 <span className="ms-3">Interviews</span>
             </li>
             <li   className={`flex items-center p-2 text-gray-900 rounded-lg  hover:bg-purple-100 group ${
@@ -87,8 +94,7 @@ const Dashboard: React.FC = () => {
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
                   viewBox="0 0 22 21"
-                >
-                </svg>
+                ></svg>
                 <span className="ms-3">Roadmaps</span>
             </li>
             {/* Additional list items based on your HTML structure */}
@@ -96,14 +102,12 @@ const Dashboard: React.FC = () => {
         </div>
       </aside>
 
-       {/* Conditional rendering based on the selected menu item */}
-       <div className="p-4 sm:ml-64">
-       
-        {activeMenuItem === 'interviews' && <Interviews />}
-        {activeMenuItem === 'roadmaps' && <About />}
+      {/* Conditional rendering based on the selected menu item */}
+      <div className="p-4 sm:ml-64">
+        {activeMenuItem === "interviews" && <Interviews />}
+        {activeMenuItem === "roadmaps" && <About />}
         {/* Additional conditional rendering based on the selected menu item */}
       </div>
-      
     </>
   );
 };
