@@ -14,7 +14,7 @@ const Dashboard: React.FC = () => {
        setIsSidebarOpen(false);
       };
   
-  
+
     return (
     <>
       <button

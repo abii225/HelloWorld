@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import {BsLaptop} from "react-icons/bs"
+import { Link } from 'react-router-dom';
+
 interface Course {
   id: number;
   title: string;
@@ -44,11 +46,14 @@ const Interviews = () => {
         <h3 className="text-xl font-semibold ml-3">{course.title}</h3>
         </div>
         <p>{course.description}</p>
+
         <div className=' w-44 flex items-center justify-between p-2 pl-0'>
           <div>10 min</div>
           <div >completed</div>
         </div>
         <button className="startButton m-2">Start Interview</button>
+        <Link to="start_interview"><button className='startButton'>Start Interview</button></Link>
+
       </div>
     ));
   };
