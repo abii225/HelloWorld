@@ -265,24 +265,43 @@ const EntireLayout = () => {
                         </Link>
                       ))}
                     </div>
-                  </>
-                </div>
-              </Disclosure.Panel>
-            </>
-          )}
-        </Disclosure>
-
-        {/* <header className="bg-white shadow">
-              <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                <h1 className="text-3xl font-bold tracking-tight text-gray-900">Dashboard</h1>
-              </div>
-            </header>
-            <main>
-              <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8"></div>
-            </main> */}
-      </div>
-    </>
-  );
-};
+                    <div className="border-t border-gray-700 pb-3 pt-4">
+                      <div className="flex items-center px-5">
+                        <div className="flex-shrink-0">
+                          <img className="h-10 w-10 rounded-full" src={user.imageUrl} alt="" />
+                        </div>
+                        <div className="ml-3">
+                          <div className="text-base font-medium leading-none text-white">{user.name}</div>
+                          <div className="text-sm font-medium leading-none text-gray-400">{user.email}</div>
+                        </div>
+                        <button
+                          type="button"
+                          className="relative ml-auto flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                        >
+                          <span className="absolute -inset-1.5" />
+                          <span className="sr-only">View notifications</span>
+                          <BellIcon className="h-6 w-6" aria-hidden="true" />
+                        </button>
+                      </div>
+                      <div className="mt-3 space-y-1 px-2">
+                        {userNavigation.map((item) => (
+                          <Link
+                            key={item.name}
+                            to={item.href}
+                            className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
+                          >
+                            {item.name}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  </Disclosure.Panel>
+                </>
+              )}
+            </Disclosure>
+          </div>
+        </>
+  )
+}
 
 export default EntireLayout;
