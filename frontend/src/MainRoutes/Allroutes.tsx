@@ -13,13 +13,12 @@ const Allroutes = () => {
   return (
     <Routes>
 
-      <Route path='/' element={<Home />}></Route>
-      <Route path='/dashboard' element={<Dashboard />}></Route>
-      <Route path='/interviews' element={<Interviews />}></Route>
-      <Route path='/about' element={<About />}></Route>
+    <Route path='/' element={<Home />}></Route>
+    <Route path='/dashboard' element={<Dashboard />}></Route>
+    <Route path='/interviews' element={<Interviews />}></Route>
+    <Route path='/about' element={<About />}></Route>
       <Route path="/dashboard/start_interview" element={<AudioToText/>} />
       <Route path="/video" element={<VideoRecorder />} />
-
     </Routes>
   );
 };
