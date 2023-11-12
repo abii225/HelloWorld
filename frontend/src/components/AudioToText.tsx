@@ -47,35 +47,6 @@ import { Speak } from "./Speak";
         };
     };
 
-  const handleSend=()=>{
-    let arr = conversation;
-    const currentConversation:userConversation={
-      username:'jahir',
-      password:"123",
-      email:'jp@gmail.com'
-    }
-    arr.push(value)
-    setConversation(arr)
-    fetch("https://weak-hen-top-coat.cyclic.app/user/register",{
-      method:"POST",
-      headers:{
-        "content-type":"application/json"
-      },
-      body:JSON.stringify(currentConversation)
-    }).then(res=>res.json())
-    .then(res=> {
-      console.log(res);
-      // const currentConversation:myConversation={
-      //   user:value,
-      //   bot:res.msg
-      // }
-      
-      arr.push(res.msg);
-      setConversation(arr)
-      setRender(!render)
-    })
-    .catch(err=> console.log(err))
-  }
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setValue(event.target.value);
   };
@@ -100,7 +71,6 @@ import { Speak } from "./Speak";
           </button>
           <span> </span>
           <button
-          onClick={handleSend}
             className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           >
             Send
