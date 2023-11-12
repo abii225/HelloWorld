@@ -18,9 +18,9 @@ const Dashboard: React.FC = () => {
     setIsSidebarOpen((prevState) => !prevState);
   };
 
-    const closeSidebar = () => {
-       setIsSidebarOpen(false);
-      };
+    // const closeSidebar = () => {
+    //    setIsSidebarOpen(false);
+    //   };
   
 
     return (

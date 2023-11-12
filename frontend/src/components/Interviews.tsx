@@ -3,6 +3,7 @@ import { useToast } from "./custom/ToastProvider";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import axios from "axios";
+import { Modal } from "./Modal";
 import {
   POST_STARTINTERVIEW_ERROR,
   POST_STARTINTERVIEW_LOADING,
@@ -33,6 +34,18 @@ const Interviews = () => {
 
   const handleTabChange = (index: number) => {
     setSelectedTab(index);
+  };
+
+
+  
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  const openModal = (): void => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = (): void => {
+    setIsModalOpen(false);
   };
 
   const startInterview = async (type: any, toast: any, navigate: any) => {
@@ -94,7 +107,7 @@ const Interviews = () => {
           <div>10 min</div>
           <div >completed</div>
         </div>
-        <Link to="start_interview"><button className='startButton'>Start Interview</button></Link>
+        <button className='startButton' onClick={openModal}>Start Interview</button>
       </div>
     ));
   };
@@ -123,6 +136,26 @@ const Interviews = () => {
           {selectedTab === 2 && renderCourseCards(completedCourses)}
         </div>
       </div>
+      <div>
+          <Modal isOpen={isModalOpen} onClose={closeModal}>
+
+            <div style={{display:'flex', justifyContent:"space-between",padding:"10%",textAlign:"center",gap:"20px"}}>
+              <div  className="cursor-pointer hover:bg-blue-300"style={{border:"1px solid black", width:"100px", height:"50px",paddingTop:"10px"}}>
+                MERN
+              </div>
+              <div className="cursor-pointer hover:bg-blue-300" style={{border:"1px solid black", width:"100px", height:"50px",paddingTop:"10px"}}>
+                JAVA
+              </div>
+              <div className="cursor-pointer hover:bg-blue-300" style={{border:"1px solid black", width:"100px", height:"50px",paddingTop:"10px"}}>
+                DSA
+              </div>
+            </div>
+          
+           <div style={{marginLeft:"25%"}}>
+              <Link to="/dashboard/start_interview"><button className="btn">Start the Interview</button></Link>
+           </div>
+          </Modal>
+       </div>
     </div>
   );
 };
