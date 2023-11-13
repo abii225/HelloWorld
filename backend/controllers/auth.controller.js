@@ -95,10 +95,9 @@ exports.logoutUser = async (req, res, next) => {
 };
 
 exports.getUserData = async (req, res, next) => {
-  const us = req.headers.authorization?.split(" ")[1];
-
+  const userId = req.headers.authorization?.split(" ")[1];
   try {
-    const user = await User.findById(userId);
+    const user = await User.findById(userId).populate("pastInterviews");
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });

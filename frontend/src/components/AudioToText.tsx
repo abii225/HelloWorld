@@ -1,69 +1,109 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
 import { Speak } from "./Speak";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../redux/store";
+import {
+  PATCH_ANSWER_ERROR,
+  PATCH_ANSWER_LOADING,
+  PATCH_ANSWER_SUCCESS,
+} from "../redux/interviewReducer/actionTypes";
+import axios from "axios";
 
-  const SpeechRecognition = 
+const SpeechRecognition =
   (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-  const mic = new SpeechRecognition();
+const mic = new SpeechRecognition();
 
-  mic.continuous = true;
-  mic.interimResults = true;
-  mic.lang = "en-US";
+mic.continuous = true;
+mic.interimResults = true;
+mic.lang = "en-US";
 
-  interface myConversation{
-    user:string,
-    bot?:string
-  }
-  interface userConversation{
-    username:String,
-    password:String,
-    email:String
-  }
+interface myConversation {
+  user: string;
+  bot?: string;
+}
+interface userConversation {
+  username: String;
+  password: String;
+  email: String;
+}
 
-  const AudioToText: React.FC = () => {
-    const [isListening, setIsListening] = useState(false);
-    const [value, setValue] = useState<string>("");
-    const [render, setRender]= useState(false)
+const AudioToText: React.FC = () => {
+  const dispatch = useDispatch();
+  const token = useSelector((store: RootState) => store.authReducer.token);
+  const { isLoading, isError, interviewId, conversation, latest } = useSelector(
+    (store: RootState) => store.interviewReducer
+  );
+  console.log(latest, "AUDIO component");
+  const [isListening, setIsListening] = useState(false);
+  const [value, setValue] = useState<string>("");
+  const [render, setRender] = useState(false);
 
-    const [conversation, setConversation]= useState<string[]>([])
-    
-    useEffect(() => {
-       handleListen();
-    },[isListening,conversation,render]);
+  const [conversationArr, setConversationArr] = useState<string[]>([]);
 
-    const handleListen = () => {
-        if (isListening) {
-            mic.start();
-        } else {
-          mic.stop();
-        }
+  useEffect(() => {
+    handleListen();
+  }, [isListening, conversationArr, render]);
 
-         mic.onresult = (event: any) => {
-            const transcript = Array.from(event.results)
-            .map((result: any) => result[0])
-            .map((result: any) => result.transcript)
-            .join("");
-            // console.log(transcript);
-            setValue(transcript);
-        };
+  const handleListen = () => {
+    if (isListening) {
+      mic.start();
+    } else {
+      mic.stop();
+    }
+
+    mic.onresult = (event: any) => {
+      const transcript = Array.from(event.results)
+        .map((result: any) => result[0])
+        .map((result: any) => result.transcript)
+        .join("");
+      // console.log(transcript);
+      setValue(transcript);
     };
+  };
 
+  const handleSend = async () => {
+    dispatch({ type: PATCH_ANSWER_LOADING });
+    try {
+      const response = await axios.patch(
+        `${process.env.REACT_APP_API_URL}/interview/${interviewId}`,
+        { conversation: [...conversation, { role: "user", content: value }] },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response.data);
+      dispatch({ type: PATCH_ANSWER_SUCCESS, payload: response.data });
+      setValue("");
+    } catch (e) {
+      console.log(e);
+      dispatch({ type: PATCH_ANSWER_ERROR });
+      setValue("");
+    }
+  };
+
+  const handleStart = () => {};
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setValue(event.target.value);
   };
 
   return (
-    <div className="ms-24 mt-24">
+    <div>
       <div>
         <div>
           {isListening ? <span>🎙️</span> : <span>🛑🎙️</span>}
-          <button onClick={() => setIsListening(true)} disabled={isListening}
+          <button
+            onClick={() => setIsListening(true)}
+            disabled={isListening}
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           >
             Start
           </button>{" "}
           <span></span>
           <button
-            onClick={(e)=>  setIsListening(false)}
+            onClick={(e) => setIsListening(false)}
             disabled={!isListening}
             className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           >
@@ -71,6 +111,7 @@ import { Speak } from "./Speak";
           </button>
           <span> </span>
           <button
+            onClick={handleSend}
             className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           >
             Send
@@ -86,15 +127,15 @@ import { Speak } from "./Speak";
             onChange={handleChange}
           ></textarea>
         </div>
-          <Speak value={value} />
+        <Speak value={latest ? latest : value} />
       </div>
-      {
-        conversation?.map((item,i)=>{
-          return <div key={i}>
+      {conversationArr?.map((item, i) => {
+        return (
+          <div key={i}>
             <p>{item}</p>
           </div>
-        })
-      }
+        );
+      })}
     </div>
   );
 };

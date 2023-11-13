@@ -1,10 +1,13 @@
-import React, { useState, ChangeEvent } from "react";
+import React, { useState,useEffect, ChangeEvent } from "react";
+import { RootState } from "../redux/store";
+import { useSelector } from "react-redux";
 
 interface SpeakProps {
   value: string;
 }
 
 const Speak: React.FC<SpeakProps> = ({ value }) => {
+  const latest = useSelector((store:RootState) => store.interviewReducer.latest);
 
   const [voiceType, setVoiceType] = useState<string>("female");
   const [voiceSpeed, setVoiceSpeed] = useState<number>(1);
@@ -30,6 +33,9 @@ const Speak: React.FC<SpeakProps> = ({ value }) => {
   const handleVoiceSpeedChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setVoiceSpeed(parseFloat(e.target.value));
   };
+  useEffect(() => {
+    // speak({ text: latest });
+  }, [latest]);
 
   return (
     <div>
