@@ -18,7 +18,7 @@ const Dashboard: React.FC = () => {
     setIsSidebarOpen((prevState) => !prevState);
   };
 
-   
+
 
     return (
     <>
