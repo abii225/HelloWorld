@@ -1,18 +1,16 @@
-import { Link, useNavigate } from "react-router-dom";
 import React, { Fragment, useEffect } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Store } from "redux";
 import { RootState } from "../redux/store";
 import {
   GET_LOGGEDUSER_LOADING,
   GET_LOGGEDUSER_ERROR,
   GET_LOGGEDUSER_SUCCESS,
 } from "../redux/authReducer/actionTypes";
-
 import { useToast } from "./custom/ToastProvider";
-// import axios from "axios";
+
 const user = {
   name: "Tom Cook",
   email: "tom@example.com",
@@ -58,35 +56,7 @@ const EntireLayout = () => {
   );
 
   console.log(isAuth, token, loggedInUser);
-  // useEffect(() => {
-  //   if (token) {
-  //     getUserData();
-  //   }
-  // }, []);
 
-  // const getUserData = async () => {
-  //   dispatch({ type: GET_LOGGEDUSER_LOADING });
-  //   const config = {
-  //     headers: {
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //   };
-  //   try {
-  //     const response = await axios.get(
-  //       `${process.env.REACT_APP_API_URL}/auth/data`,
-  //       config
-  //     );
-  //     console.log(response.data.user);
-  //     const userWithProfileImage = response.data.user;
-  //     userWithProfileImage.profileImage = `${process.env.REACT_APP_API_URL}/${userWithProfileImage.profileImage}`;
-  //     console.log(userWithProfileImage);
-  //     dispatch({ type: GET_LOGGEDUSER_SUCCESS, payload: userWithProfileImage });
-  //   } catch (error) {
-  //     console.log("Error fetching user data:", error);
-  //     dispatch({ type: GET_LOGGEDUSER_ERROR });
-  //     toast("warning", "Couldn't fetch user data, try logging in again");
-  //   }
-  // };
   return (
     <>
       <div className="min-h-full">
@@ -99,13 +69,7 @@ const EntireLayout = () => {
                   style={{ marginLeft: "24rem" }}
                 >
                   <div className="flex items-center">
-                    <div className="flex-shrink-0">
-                      {/* <img
-                            className="h-8 w-8"
-                            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                            alt="Your Company"
-                          /> */}
-                    </div>
+                    <div className="flex-shrink-0"></div>
                     <div className="hidden md:block">
                       <div className="ml-10 flex items-baseline space-x-4">
                         {navigation.map((item) => (
@@ -301,6 +265,7 @@ const EntireLayout = () => {
                         </Link>
                       ))}
                     </div>
+
                   </div>
                 </div>
               </Disclosure.Panel>
