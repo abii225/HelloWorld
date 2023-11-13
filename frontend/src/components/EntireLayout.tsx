@@ -227,7 +227,7 @@ const EntireLayout = () => {
                     </Link>
                   ))}
                 </div>
-                  <div className="border-t border-gray-700 pb-3 pt-4">
+                <div className="border-t border-gray-700 pb-3 pt-4">
                   <div className="flex items-center px-5">
                     <div className="flex-shrink-0">
                       <img
@@ -252,8 +252,8 @@ const EntireLayout = () => {
                       <span className="sr-only">View notifications</span>
                       <BellIcon className="h-6 w-6" aria-hidden="true" />
                     </button>
-                    </div>
-                    <div className="mt-3 space-y-1 px-2">
+                  </div>
+                  <div className="mt-3 space-y-1 px-2">
                     {userNavigation.map((item) => (
                       <Link
                         key={item.name}
@@ -263,7 +263,7 @@ const EntireLayout = () => {
                         {item.name}
                       </Link>
                     ))}
-                    </div>
+                  </div>
                   <div className="border-t border-gray-700 pb-3 pt-4">
                     <div className="flex items-center px-5">
                       <div className="flex-shrink-0">
