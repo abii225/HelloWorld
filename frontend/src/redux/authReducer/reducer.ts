@@ -11,6 +11,7 @@ import {
   GET_LOGGEDUSER_ERROR,
   GET_LOGGEDUSER_LOADING,
   GET_LOGGEDUSER_SUCCESS,
+  PATCH_LOGGEDUSER_SUCCESS
 } from "./actionTypes";
 import { Action } from "./types"; // Define your types as needed
 
@@ -93,6 +94,11 @@ export const reducer = (state: State = initState, action: Action): State => {
         isError: false,
         loggedInUser: action.payload,
       };
+    case PATCH_LOGGEDUSER_SUCCESS:
+      return {
+        ...state,
+        loggedInUser: action.payload
+      }
     default:
       return state;
   }

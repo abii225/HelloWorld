@@ -17,7 +17,6 @@ router.patch("/interview/:id", interviewController.updateInterview);
 router.post("/interview/end/:id", interviewController.endInterview);
 
 
-
 // /interview/:id (GET to retrieve details of a specific interview)
 router.get("/interview/:id", interviewController.getInterview);
 
