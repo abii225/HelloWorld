@@ -14,6 +14,30 @@
   body {
     /* @apply bg-background; */
   }
+  h1 {
+    @apply text-4xl;
+    text-align: left;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+  h2 {
+    @apply text-2xl;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  h3 {
+    @apply text-lg;
+    text-transform: uppercase;
+    font-weight: 500;
+    letter-spacing: 1px;
+  }
+  h4 {
+    @apply text-base;
+    text-transform: uppercase;
+    font-weight: 500;
+    letter-spacing: 1px;
+  }
 }
 
 @layer components {
@@ -33,7 +57,7 @@
     background-color: ghostwhite;
   }
   .startButton {
-    background-color: rgb(0,168,132);
+    background-color: rgb(0, 168, 132);
     color: white;
     border: none;
     padding: 10px;
@@ -54,17 +78,17 @@
     align-items: center;
     width: 3rem;
     height: 3rem;
-    background-color: #0fae53; 
+    background-color: #0fae53;
     color: whitesmoke;
-    border-radius: 50%; 
+    border-radius: 50%;
   }
-  .interview{
+  .interview {
     width: 100%;
     display: flex;
     align-items: center;
     padding: 10px 0 10px 0;
   }
-  .card_Home{
+  .card_Home {
     width: 21%;
     height: 18rem;
     border-radius: 5px;

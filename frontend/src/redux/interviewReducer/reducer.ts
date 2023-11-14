@@ -44,7 +44,7 @@ export const reducer = (state: State = initState, action: Action): State => {
     case POST_STARTINTERVIEW_LOADING:
       return {
         ...state,
-        isPageLoading: true,
+        isLoading: true,
       };
     case POST_STARTINTERVIEW_ERROR:
       return {

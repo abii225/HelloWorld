@@ -11,6 +11,8 @@ const userRoutes = require("./routes/user.routes");
 app.use(express.json());
 app.use(cors());
 app.use("/images", express.static("images"));
+app.use("/vods", express.static("vods"));
+
 
 // All Routes
 app.use("/auth", authRoutes);

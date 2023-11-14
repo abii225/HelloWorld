@@ -39,52 +39,5 @@
 
 /* Add these styles to your CSS file or component style definition */
 
-.profile-modal-overlay {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(0, 0, 0, 0.5);
-}
 
-.profile-modal {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.profile-container {
-  display: flex;
-  max-width: 600px;
-  background-color: #fff;
-  border-radius: 8px;
-  overflow: hidden;
-  /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
-  padding: 15px;
-}
-
-.profile-image {
-  flex: 1;
-  padding: 10px;
-}
-
-.profile-data {
-  flex: 2;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-}
-
-.profile-image img {
-  width: 100%;
-  height: auto;
-  cursor:not-allowed;
-  /* border-radius: px 0 0 8px; */
-}
-
-input{
-  padding: 5px;
-  border: 1px solid black;
-  border-radius: 5px;
-  padding-left:10px;
-}
 /* Add any additional styling you may need */
