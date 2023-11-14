@@ -30,7 +30,7 @@
     @apply px-4 py-2 bg-primary_green rounded-md text-white;
   }
   .bgcolor {
-    background-color: rgb(254, 223, 229);
+    background-color: ghostwhite;
   }
   .startButton {
     background-color: rgb(0,168,132);
@@ -68,6 +68,6 @@
     width: 21%;
     height: 18rem;
     border-radius: 5px;
-
   }
 }
+

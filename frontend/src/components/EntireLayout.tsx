@@ -29,8 +29,7 @@ interface NavigationItem {
 const navigation: NavigationItem[] = [
   { name: "Home", href: "/", current: true },
   { name: "Dashboard", href: "/dashboard", current: false },
-  { name: "Video", href: "/video", current: false },
-  { name: "Roadmaps", href: "#/roadmap", current: false },
+  { name: "Profile", href: "/profile", current: false },
 ];
 
 const userNavigation = [{ name: "Sign out", href: "#" }];
@@ -85,8 +84,8 @@ const EntireLayout = () => {
   };
   return (
     <>
-      <div className="min-h-full">
-        <Disclosure as="nav" className={"bgcolor"}>
+      <div className="min-h-full mb-[1rem]">
+        <Disclosure as="nav" className="bgcolor" style={{width: "100%"}}>
           {({ open }) => (
             <>
               <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -103,13 +102,12 @@ const EntireLayout = () => {
                           /> */}
                     </div>
                     <div className="hidden md:block">
-                      <div className="ml-10 flex items-baseline space-x-4">
+                      <div className="ml-10 flex items-baseline space-x-4 cursor-pointer">
                         {navigation.map((item) => (
                           <Link
                             key={item.name}
                             to={item.href}
-                            className="rounded-md px-3 py-2 text-lg font-small"
-                          >
+                            className="rounded-md px-3 py-2 text-lg font-small transition-colors hover:text-green-500">
                             {item.name}
                           </Link>
                         ))}
@@ -218,9 +216,9 @@ const EntireLayout = () => {
                           : "text-gray-300 hover:bg-gray-700 hover:text-white",
                         "block rounded-md px-3 py-2 text-base font-medium"
                       )}
-                      aria-current={item.current ? "page" : undefined}
-                    >
+                      aria-current={item.current ? "page" : undefined}>
                       {item.name}
+                      
                     </Link>
                   ))}
                 </div>
