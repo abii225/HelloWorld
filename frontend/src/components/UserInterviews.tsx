@@ -67,7 +67,7 @@ export const UserInterviews: React.FC = () => {
   };
 
   return (
-    <>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-3.5">
       {isLoading ? (
         <SmallLoader />
       ) : isError ? (
@@ -77,23 +77,53 @@ export const UserInterviews: React.FC = () => {
         userInterviews.map((el: any) => {
           return (
             <div className="rounded-md shadow-md p-4 flex gap-4">
-              <img src="https://placehold.co/300x200" alt="placeholder image" />
+              <video className="h-full w-3/5 rounded-lg" controls>
+                <source
+                  src={`${process.env.REACT_APP_API_URL}/${el.videoPath}`}
+                />
+                Your browser does not support the video tag.
+              </video>
               <div className="flex flex-col justify-between">
                 <div>
-                  <h3>Type: {el.interviewType}</h3>
-                  <p>Interview Score: {el.feedback.overallScore}/10</p>
+                  <h3>
+                    Type:{" "}
+                    <span className="text-primary_green">
+                      {el.interviewType}
+                    </span>
+                  </h3>
+                  <h3>
+                    Interview Score:{" "}
+                    <span className="text-primary_green">
+                      {el.feedback.overallScore}/10
+                    </span>
+                  </h3>
                 </div>
                 <div>
                   <button className="btn-outline" onClick={openModal}>
                     View Details
                   </button>
                   <Modal isOpen={isModalOpen} onClose={closeModal}>
-                    <div className="p-8 mx-auto overflow-y-scroll">
-                      <h2>Detailed Feedback</h2>
+                    <div
+                      className="p-8 mx-auto overflow-y-scroll"
+                      style={{ height: "80vh" }}
+                    >
+                      <h2 className="mb-4">
+                        Details Of The Interview{" "}
+                        <span className="text-primary_green font-normal">
+                          {el.interviewType}
+                        </span>
+                      </h2>
+                      <video className="h-4/5/3 w-4/5 rounded-lg mb-4" controls>
+                        <source
+                          src={`${process.env.REACT_APP_API_URL}/${el.videoPath}`}
+                        />
+                        Your browser does not support the video tag.
+                      </video>
+                      <h3 className="mb-2">Detailed Feedback</h3>
                       {el.feedback.strengths.length > 0 && (
                         <>
-                          <h4>Strengths:</h4>
-                          <ul>
+                          <h4 className="mb-1">Your Strengths :</h4>
+                          <ul className="list-disc mb-4">
                             {el.feedback.strengths.map((ele: any) => {
                               return <li>{ele}</li>;
                             })}
@@ -102,8 +132,8 @@ export const UserInterviews: React.FC = () => {
                       )}
                       {el.feedback.improvementAreas.length > 0 && (
                         <>
-                          <h4>Improvement Areas:</h4>
-                          <ul>
+                          <h4 className="mb-2">Improvement Areas:</h4>
+                          <ul className="list-disc mb-4">
                             {el.feedback.improvementAreas.map((ele: any) => {
                               return <li>{ele}</li>;
                             })}
@@ -111,19 +141,19 @@ export const UserInterviews: React.FC = () => {
                         </>
                       )}
                       <div>
-                        <h4>Conversation :</h4>
-                        <div className="h-64 w-96 overflow-y-scroll">
+                        <h4 className="mb-2">Conversation :</h4>
+                        <div className="h-64 w-96 overflow-y-scroll mb-8">
                           {el.conversation.length > 0 &&
-                            el.conversation.map((ele: any) => {
+                            el.conversation.slice(1).map((ele: any) => {
                               return (
                                 <div
-                                  className={`shadow-md rounded-md p-4 my-2 flex flex-col gap-2 justify-between ${
+                                  className={`w-full shadow-md rounded-md p-4 my-2 flex flex-col gap-2 justify-between ${
                                     ele.role == "user"
                                       ? "bg-slate-400"
                                       : "bg-gray-200"
                                   }`}
                                 >
-                                  <div className="flex gap-4 items-center">
+                                  <div className="w-full flex gap-4 items-center">
                                     <img
                                       className="w-10 h-10 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
                                       src={
@@ -136,8 +166,8 @@ export const UserInterviews: React.FC = () => {
                                     <div className="inline-block  min-h-[1em] w-0.5 self-stretch bg-neutral-100 opacity-100 dark:opacity-50"></div>
                                     <h3>
                                       {ele.role == "user"
-                                        ? `${loggedInUser.username}:`
-                                        : "Intellibot:"}
+                                        ? `${loggedInUser.username}`
+                                        : "Intellibot"}
                                     </h3>
                                   </div>
                                   <p>{ele.content}</p>
@@ -147,9 +177,17 @@ export const UserInterviews: React.FC = () => {
                         </div>
                       </div>
                     </div>
-                    <button className="btn-outline" onClick={closeModal}>
-                      Close Details
-                    </button>
+                    <div className="py-4 flex items-center justify-between">
+                      <button className="btn-outline" onClick={closeModal}>
+                        Close Details
+                      </button>
+                      <h2>
+                        Score{" "}
+                        <span className="text-primary_green font-normal">
+                          {el.feedback.overallScore}/10
+                        </span>
+                      </h2>
+                    </div>
                   </Modal>
                 </div>
               </div>
@@ -157,6 +195,6 @@ export const UserInterviews: React.FC = () => {
           );
         })
       )}
-    </>
+    </div>
   );
 };

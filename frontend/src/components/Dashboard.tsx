@@ -5,8 +5,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { Modal } from "./Modal";
 import { Link } from "react-router-dom";
- import "../App.css"
- import profile from "./Images/1699708758159.png"
+import "../App.css";
+import profile from "./Images/1699708758159.png";
 
 interface UserProfile {
   profilePicture: string;
@@ -25,14 +25,15 @@ interface ProfileModalProps {
 }
 
 const Dashboard: React.FC = () => {
-
-  const loggedInUser = useSelector( (store: RootState) => store.authReducer.loggedInUser);
+  const loggedInUser = useSelector(
+    (store: RootState) => store.authReducer.loggedInUser
+  );
   console.log(loggedInUser);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeMenuItem, setActiveMenuItem] = useState<
     "roadmaps" | "interviews"
   >("interviews");
-  
+
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const openModal = (): void => {
@@ -185,7 +186,7 @@ const Dashboard: React.FC = () => {
         {/* Additional conditional rendering based on the selected menu item */}
       </div>
       <div>
-          {/* <Modal isOpen={isModalOpen} onClose={closeModal}>
+        {/* <Modal isOpen={isModalOpen} onClose={closeModal}>
 
             <div style={{width:"400px",display:'flex',flexDirection:"column", gap:"10px",padding:"10px"}}>
               <label >Username</label>
@@ -202,42 +203,88 @@ const Dashboard: React.FC = () => {
               <Link to="/"><button className="btn">Edit Profile</button></Link>
            </div>
           </Modal> */}
-          <Modal
-            isOpen={isModalOpen}
-            onClose={closeModal}
-      // contentLabel="Profile Modal"
-            // className="profile-modal"
-      // overlayClassName="profile-modal-overlay"
-    >
-      <div className="profile-container">
-        <div className="profile-image">
-          <img src={profile} alt="Profile" style={{borderRadius:"50%"}}/>
-        </div>
-        <div className="profile-data">
-          <h1 style={{textAlign:"center"}}>User Details</h1>
-          <p style={{display:"flex",flexDirection:"column"}}> Username: {isEditing ? <input value={username} onChange={(e) => setUsername(e.target.value)} /> : "Jahir Pendhari"}</p>
-          {/* <p>Email: {"jahirpp1999@gmail.com"}</p> */}
-          <p style={{display:"flex",flexDirection:"column"}}>Email: {isEditing ? <input value={username} onChange={(e) => setUsername(e.target.value)} /> : "jahirpp1999@gmail.com"}</p>
-          {/* <p>Bio: {"I'am Jahir Pendhari"}</p> */}
-          <p style={{display:"flex",flexDirection:"column"}}>Bio: {isEditing ? <input value={username} onChange={(e) => setUsername(e.target.value)} /> : "I'am Jahir Pendhari"}</p>
-
-          {isEditing && (
-            <div style={{display:"flex", flexDirection:"column"}}>
-              <label>New Password:</label>
-              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}  style={{padding: "5px",border: "1px solid black",borderRadius: "5px",paddingLeft:"10px"}} />
-
-              <label>Confirm Password:</label>
-              <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}  style={{padding: "5px",border: "1px solid black",borderRadius: "5px",paddingLeft:"10px"}} />
+        <Modal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          // contentLabel="Profile Modal"
+          // className="profile-modal"
+          // overlayClassName="profile-modal-overlay"
+        >
+          <div className="profile-container">
+            <div className="profile-image">
+              <img
+                src={loggedInUser?.profileImage}
+                alt="Profile"
+                style={{ borderRadius: "50%" }}
+              />
             </div>
-          )}
+            <div className="profile-data">
+              <h1>User Details</h1>
+              <p>
+                {" "}
+                Username:{" "}
+                {isEditing ? (
+                  <input
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                  />
+                ) : (
+                  "Jahir Pendhari"
+                )}
+              </p>
+              {/* <p>Email: {"jahirpp1999@gmail.com"}</p> */}
+              <p>
+                Email:{" "}
+                {isEditing ? (
+                  <input
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                  />
+                ) : (
+                  "jahirpp1999@gmail.com"
+                )}
+              </p>
+              {/* <p>Bio: {"I'am Jahir Pendhari"}</p> */}
+              <p>
+                Bio:{" "}
+                {isEditing ? (
+                  <input
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                  />
+                ) : (
+                  "I'am Jahir Pendhari"
+                )}
+              </p>
 
-          <button onClick={isEditing ? handleSaveClick : handleEditClick} className="btn">
-            {isEditing ? "Save" : "Edit Profile"}
-          </button>
-        </div>
+              {isEditing && (
+                <div>
+                  <label>New Password:</label>
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+
+                  <label>Confirm Password:</label>
+                  <input
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                  />
+                </div>
+              )}
+
+              <button
+                onClick={isEditing ? handleSaveClick : handleEditClick}
+                className="btn"
+              >
+                {isEditing ? "Save" : "Edit Profile"}
+              </button>
+            </div>
+          </div>
+        </Modal>
       </div>
-    </Modal>
-       </div>
     </>
   );
 };

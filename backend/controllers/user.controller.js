@@ -26,37 +26,87 @@ exports.getUserInterviews = async (req, res, next) => {
   }
 };
 
-exports.updateUser = async(req,res,next)=>{
+exports.updateUser = async (req, res, next) => {
   const { id } = req.params;
-  const {username,password,bio}= req.body;
-  console.log(id,"id")
-  try{
+  const { username, password, bio } = req.body;
+  console.log(id, "id");
+  try {
     let user = await User.findOne({ _id: id });
-    if(user)
-    {
-      bcrypt.hash(password, 8, async (err, hash)=> {
+    if (user) {
+      bcrypt.hash(password, 8, async (err, hash) => {
         // Store hash in your password DB.
         if (err) {
           return res.status(400).json({ message: "Couldn't hash password" });
         } else if (hash) {
           // Update user Data
-          const updatedUser ={
+          const updatedUser = {
             username,
             password: hash,
             bio,
           };
           console.log(updatedUser);
-          await User.findByIdAndUpdate( id ,updatedUser);
-          //send the updated User DEtails object as responsene 
-          res.status(200).json({ message: "User Detailes Updated Successfully","User":req.body});
+          await User.findByIdAndUpdate(id, updatedUser);
+          //send the updated User DEtails object as responsene
+          res.status(200).json({
+            message: "User Detailes Updated Successfully",
+            User: req.body,
+          });
         }
       });
-    }else{
+    } else {
       res.status(400).json({ message: "User Not Found" });
     }
-  }
-  catch (err) {
+  } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Something went wrong while updating" });
   }
-}
+};
+
+exports.getLeaderboard = async (req, res, next) => {
+  try {
+    // Retrieve data from the database for all users
+    const leaderboardData = await Promise.all(
+      (
+        await User.find()
+      ).flatMap(async (user) => {
+        const bestInterview = await Promise.all(
+          user.pastInterviews.map(async (interview) => {
+            const feedback = await Feedback.findById(interview.feedback);
+
+            return {
+              userId: user._id,
+              username: user.username,
+              profileImage: user.profileImage,
+              overallScore: feedback ? feedback.overallScore : 0,
+            };
+          })
+        );
+
+        return bestInterview;
+      })
+    );
+
+    // Flatten the array of arrays
+    const flattenedLeaderboardData = leaderboardData.flat();
+
+    // Sort the data by overallScore in descending order
+    flattenedLeaderboardData.sort((a, b) => b.overallScore - a.overallScore);
+
+    // Add a rank to each entry
+    const leaderboardWithRank = flattenedLeaderboardData.map(
+      (entry, index) => ({
+        ...entry,
+        rank: index + 1,
+      })
+    );
+
+    console.log(leaderboardWithRank);
+    res.status(200).json({
+      message: "Leaderboard created successfully",
+      leaderboard: leaderboardWithRank,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Couldn't fetch leaderboard" });
+  }
+};

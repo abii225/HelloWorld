@@ -7,7 +7,7 @@ import {
   PATCH_ANSWER_SUCCESS,
 } from "../redux/interviewReducer/actionTypes";
 import axios from "axios";
-import { Speak } from "./Speak";
+import { SpeakToText } from "./SpeakToText";
 
 const SpeechRecognition =
   (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
@@ -17,9 +17,7 @@ mic.continuous = true;
 mic.interimResults = true;
 mic.lang = "en-US";
 
-
 const AudioToText: React.FC = () => {
-
   const dispatch = useDispatch();
   const token = useSelector((store: RootState) => store.authReducer.token);
   const { isLoading, isError, interviewId, conversation, latest } = useSelector(
@@ -30,7 +28,6 @@ const AudioToText: React.FC = () => {
   const [isListening, setIsListening] = useState(false);
   const [value, setValue] = useState<string>("");
   const [render, setRender] = useState(false);
-
 
   useEffect(() => {
     handleListen();
@@ -73,9 +70,8 @@ const AudioToText: React.FC = () => {
       console.log(e);
       dispatch({ type: PATCH_ANSWER_ERROR });
       setValue("");
-      
     }
-    setRender(!render)
+    setRender(!render);
   };
 
   const handleStart = () => {};
@@ -106,21 +102,22 @@ const AudioToText: React.FC = () => {
             </button>
           </div>
 
-          <button onClick={handleSend} className="btn">Send</button>
-      </div>
-      <br />
-      <div>
-        <textarea
-          value={value}
-          onChange={handleChange}
-          className="block p-2.5 h-32 mb-4 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          
-          placeholder="Write your answers here..."
-        ></textarea>
-        <Speak value={latest ? latest : value} />
+          <button onClick={handleSend} className="btn">
+            Send
+          </button>
+        </div>
+        <br />
+        <div>
+          <textarea
+            value={value}
+            onChange={handleChange}
+            className="block p-2.5 h-32 mb-4 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Write your answers here..."
+          ></textarea>
+          <SpeakToText value={latest ? latest : value} />
+        </div>
       </div>
     </div>
-  </div>
   );
 };
 
