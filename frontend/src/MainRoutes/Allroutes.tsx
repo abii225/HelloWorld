@@ -15,9 +15,6 @@ const Allroutes = () => {
   return (
     <Routes>
     <Route path='/' element={<Home />}></Route>
-    {/* <Route path='/dashboard' element={<Dashboard />}></Route> */}
-    {/* <Route path='/about' element={<About />}></Route> */}
-      {/* <Route path="/video" element={<VideoRecorder />} /> */}
     <Route path='/dashboard' element={<Interviews />}></Route>
       <Route path="/dashboard/start_interview" element={<InterviewRoom/>} />
       <Route path="/profile" element={<Profile/>} />
