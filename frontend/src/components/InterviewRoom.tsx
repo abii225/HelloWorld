@@ -48,39 +48,6 @@ export const InterviewRoom: React.FC = () => {
   const [recordedChunks, setRecordedChunks] = useState<Blob[]>([]);
   const [stream, setStream] = useState<MediaStream | null>(null);
 
-  // const startRecording = (newStream: MediaStream) => {
-  //   const recorder = new MediaRecorder(newStream);
-  //   // rest of your recording logic
-  //   recorder.ondataavailable = (e) => {
-  //     if (e.data.size > 0) {
-  //       setRecordedChunks((prev) => [...prev, e.data]);
-  //     }
-  //   };
-
-  //   setMediaRecorder(recorder);
-  //   setStream(newStream);
-  //   recorder.start();
-  // };
-  // const startRecording = (newStream: any) => {
-  //   // const newStream = await navigator.mediaDevices.getUserMedia({
-  //   //   video: true,
-  //   // });
-  //   if (videoRef.current) {
-  //     videoRef.current.srcObject = newStream;
-  //   }
-
-  //   const recorder = new MediaRecorder(newStream);
-  //   recorder.ondataavailable = (e) => {
-  //     if (e.data.size > 0) {
-  //       setRecordedChunks((prev) => [...prev, e.data]);
-  //     }
-  //   };
-
-  //   setMediaRecorder(recorder);
-  //   setStream(newStream);
-  //   recorder.start();
-  // };
-
   const stopRecording = () => {
     if (mediaRecorder && stream) {
       mediaRecorder.onstop = () => {};
@@ -132,7 +99,6 @@ export const InterviewRoom: React.FC = () => {
     dispatch({ type: POST_ENDINTERVIEW_LOADING });
     try {
       stopRecording();
-
       // Create a FormData object
       const formData = new FormData();
 
@@ -156,9 +122,11 @@ export const InterviewRoom: React.FC = () => {
       setRecordedChunks([]);
       console.log(response.data);
       dispatch({ type: POST_ENDINTERVIEW_SUCCESS });
+      const userWithProfileImage = response.data.updatedUser;
+      userWithProfileImage.profileImage = `${process.env.REACT_APP_API_URL}/${userWithProfileImage.profileImage}`;
       dispatch({
         type: PATCH_LOGGEDUSER_SUCCESS,
-        payload: response.data.updatedUser,
+        payload: userWithProfileImage,
       });
       toast("success", `${response.data.message}`);
       navigate("/dashboard");
@@ -175,13 +143,16 @@ export const InterviewRoom: React.FC = () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: true,
+          audio: true,
         });
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
         }
 
         setStream(stream);
-        const recorder = new MediaRecorder(stream);
+        const recorder = new MediaRecorder(stream, {
+          mimeType: "video/webm;codecs=vp9,opus",
+        });
         // rest of your recording logic
         recorder.ondataavailable = (e) => {
           if (e.data.size > 0) {
@@ -193,7 +164,7 @@ export const InterviewRoom: React.FC = () => {
         setStream(stream);
         recorder.start();
 
-        // dispatch({ type: POST_STARTINTERVIEW_LOADING });
+        dispatch({ type: POST_STARTINTERVIEW_LOADING });
         const response = await axios.post(
           `${process.env.REACT_APP_API_URL}/interview/start`,
           { type: type },
@@ -205,7 +176,7 @@ export const InterviewRoom: React.FC = () => {
           }
         );
         // startRecording(stream);
-        console.log(response);
+        // console.log(response);
         dispatch({ type: POST_STARTINTERVIEW_SUCCESS, payload: response.data });
       } catch (e) {
         console.log(e);
@@ -241,7 +212,7 @@ export const InterviewRoom: React.FC = () => {
             Ongoing Interview : <strong>{type} Interview</strong>
           </h2>
         </div>
-        <div className="py-40 px-4  ">
+        <div className="py-40 px-4 relative">
           <div className="flex gap-4">
             <div className="relative border-2 w-1/2 h-96 rounded-lg bg-gray-600 border-gray-50">
               <img
@@ -256,28 +227,24 @@ export const InterviewRoom: React.FC = () => {
                 src={loggedInUser.profileImage}
                 alt=""
               /> */}
-              <video ref={videoRef} controls autoPlay />
+              <video ref={videoRef} controls autoPlay muted />
             </div>
           </div>
-        </div>
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-4 items-center">
-          <button className=" btn mb-4 bg-red-500" onClick={handleEndInterview}>
-            {/* onClick={handleEndInterview} */}
-            End Interview
-          </button>
-          <button onClick={stopRecording} className="btn-outline">
-            Stop Recording
-          </button>
+          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-4 items-center">
+            <button className="btn bg-red-500" onClick={handleEndInterview}>
+              {/* onClick={handleEndInterview} */}
+              End Interview
+            </button>
+            <button onClick={stopRecording} className="btn-outline">
+              Stop Recording
+            </button>
+          </div>
         </div>
       </div>
       <div className="bg-text p-4 w-1/3 flex-col gap-8 border-l">
-        <div className="p-4 flex-grow mb-12 bg-white w-full h-3/5 max-h-3/5 rounded-md border scroll-m-0 overflow-y-scroll overflow-x-hidden">
-          {isLoading ? (
-            <SmallLoader />
-          ) : isError ? (
-            <Error />
-          ) : (
-            conversation.length > 0 &&
+        <div className="p-4 flex-grow mb-12 bg-white w-full h-3/5 rounded-md border scroll-m-0 overflow-y-scroll overflow-x-hidden">
+          {isLoading ? <SmallLoader /> : isError && <Error />}
+          {conversation.length > 0 &&
             conversation
               .slice(1)
               .reverse()
@@ -309,8 +276,7 @@ export const InterviewRoom: React.FC = () => {
                     <p>{el.content}</p>
                   </div>
                 );
-              })
-          )}
+              })}
         </div>
         <AudioToText></AudioToText>
       </div>

@@ -81,7 +81,7 @@ exports.startInterview = async (req, res, next) => {
       user: req.userId,
       interviewType: type,
       videoPath: null,
-      conversation: [...conversation,{ role: "assistant", content: question }],
+      conversation: [...conversation, { role: "assistant", content: question }],
       feedback: null,
     });
     await newInterview.save();
@@ -138,13 +138,12 @@ exports.updateInterview = async (req, res, next) => {
 exports.endInterview = async (req, res, next) => {
   const userId = req.userId;
   const { id } = req.params;
-  //conversation = req.body
   const { conversation } = req.body;
   const updatedConversation = JSON.parse(conversation);
   const videoPath = req.file ? req.file.path : null;
   console.log(videoPath);
   try {
-    // send chat gpt the ending prompt with the entire conversation,=> feedback object
+    // Send chat GPT the ending prompt with the entire conversation and feedback object
     const response = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [
@@ -152,28 +151,25 @@ exports.endInterview = async (req, res, next) => {
         { role: "user", content: endingPrompt },
       ],
     });
-    //extract teh object from api's response
+
+    // Extract the object from the API's response
     const ans = response.choices[0].message.content;
-    console.log(ans, "chatgpts answer");
-    // const obj= JSON.parse(response.choices[0].message.content);
     const feedback = JSON.parse(ans);
 
-    // cont newFeedback= new Feedback(obj);
+    // Create a new Feedback object
     const newFeedback = new Feedback({ ...feedback, interview: id });
-    // await newFeedback.save();
-    await newFeedback.save();
-    console.log(newFeedback);
 
-    //   await Interview.findByIdAndUpdate({id}, { feedback: newFeedback._id});
+    // Save the new Feedback object
+    await newFeedback.save();
+
+    // Update the interview with the new duration and feedback
     const updatedInterview = await Interview.findByIdAndUpdate(id, {
       feedback: newFeedback._id,
       videoPath,
     });
-    // console.log(updatedInterview);
 
-    //  const user= await User.findOne(req.userId);
+    // Find the logged-in user and update their pastInterviews
     const loggedInUser = await User.findOne({ _id: userId });
-    //   await User.findByIdAndUpdate({req.userId}, { pastInterviews: [...user.pastInterviews, id]});
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       {
@@ -181,16 +177,17 @@ exports.endInterview = async (req, res, next) => {
       },
       { new: true }
     );
-    // console.log(updatedUser);
 
-    res
-      .status(200)
-      .json({ message: "Thankyou for attempting this interview", updatedUser });
+    res.status(200).json({
+      message: "Thank you for attempting this interview",
+      updatedUser,
+    });
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: "Couldn't End Inteview" });
+    res.status(500).json({ message: "Couldn't End Interview" });
   }
 };
+
 
 exports.getInterview = (req, res, next) => {
   // const { interviewId } = req.params; // Assuming interviewId is passed in the request parameters

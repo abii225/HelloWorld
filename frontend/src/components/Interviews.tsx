@@ -8,6 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { CHANGE_INTERVIEW_TYPE } from "../redux/interviewReducer/actionTypes";
 import { UserInterviews } from "./UserInterviews";
 import { Button } from "flowbite-react";
+import { UserAction } from "./UserAction";
 
 interface Course {
   id: number;
@@ -79,7 +80,7 @@ const Interviews = () => {
 
   return (
     <div>
-      <div className=" mx-auto p-4 bg-white rounded-lg shadow-lg">
+      <div className=" mx-auto p-8  bg-white rounded-lg shadow-lg">
         <div className="mb-4">
           <ul className="flex gap-5">
             <li
@@ -87,24 +88,28 @@ const Interviews = () => {
                 selectedTab === 0 && "border-b-2 border-primary_green"
               }`}
             >
-              <div onClick={() => handleTabChange(0)}>Get Started</div>
+              <div onClick={() => handleTabChange(0)}>
+                <h4 className={`${selectedTab == 0 && "text-primary_green"}`}>
+                  Get Started
+                </h4>
+              </div>
             </li>
             <li
               className={`cursor-pointer ${
                 selectedTab === 1 && "border-b-2 border- border-primary_green"
               }`}
             >
-              <div onClick={() => handleTabChange(1)}>Completed</div>
+              <div onClick={() => handleTabChange(1)}>
+                <h4 className={`${selectedTab == 1 && "text-primary_green"}`}>
+                  Completed Interviews
+                </h4>
+              </div>
             </li>
           </ul>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-3.5">
-          {selectedTab === 0 && (
-            <button className="btn w-1/2 py-4 text-lg my-5" onClick={openModal}>
-              Start Interview
-            </button>
-          )}
+        <div>
+          {selectedTab === 0 && <UserAction openModal={openModal} />}
           {selectedTab === 1 && <UserInterviews />}
         </div>
       </div>
