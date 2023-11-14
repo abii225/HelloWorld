@@ -71,8 +71,6 @@ exports.loginUser = async (req, res, next) => {
           .status(400)
           .json({ message: "Invalid password,Try again" });
         }
-
-       
       });
     } else {
       return res

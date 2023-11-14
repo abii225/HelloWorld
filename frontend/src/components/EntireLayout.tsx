@@ -3,15 +3,15 @@ import React, { Fragment, useEffect } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useDispatch, useSelector } from "react-redux";
-import { Store } from "redux";
 import { RootState } from "../redux/store";
 import {
-  GET_LOGGEDUSER_LOADING,
-  GET_LOGGEDUSER_ERROR,
-  GET_LOGGEDUSER_SUCCESS,
+  GET_LOGOUT_LOADING,
+  GET_LOGOUT_ERROR,
+  GET_LOGOUT_SUCCESS,
 } from "../redux/authReducer/actionTypes";
 
 import { useToast } from "./custom/ToastProvider";
+import axios from "axios";
 // import axios from "axios";
 const user = {
   name: "Tom Cook",
@@ -29,15 +29,11 @@ interface NavigationItem {
 const navigation: NavigationItem[] = [
   { name: "Home", href: "/", current: true },
   { name: "Dashboard", href: "/dashboard", current: false },
-  { name: "About", href: "/about", current: false },
+  { name: "Video", href: "/video", current: false },
   { name: "Roadmaps", href: "#/roadmap", current: false },
 ];
 
-const userNavigation = [
-  { name: "Your Profile", href: "#" },
-  { name: "Settings", href: "#" },
-  { name: "Sign out", href: "#" },
-];
+const userNavigation = [{ name: "Sign out", href: "#" }];
 
 function classNames(...classes: (string | boolean)[]): string {
   return classes.filter(Boolean).join(" ");
@@ -64,29 +60,29 @@ const EntireLayout = () => {
   //   }
   // }, []);
 
-  // const getUserData = async () => {
-  //   dispatch({ type: GET_LOGGEDUSER_LOADING });
-  //   const config = {
-  //     headers: {
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //   };
-  //   try {
-  //     const response = await axios.get(
-  //       `${process.env.REACT_APP_API_URL}/auth/data`,
-  //       config
-  //     );
-  //     console.log(response.data.user);
-  //     const userWithProfileImage = response.data.user;
-  //     userWithProfileImage.profileImage = `${process.env.REACT_APP_API_URL}/${userWithProfileImage.profileImage}`;
-  //     console.log(userWithProfileImage);
-  //     dispatch({ type: GET_LOGGEDUSER_SUCCESS, payload: userWithProfileImage });
-  //   } catch (error) {
-  //     console.log("Error fetching user data:", error);
-  //     dispatch({ type: GET_LOGGEDUSER_ERROR });
-  //     toast("warning", "Couldn't fetch user data, try logging in again");
-  //   }
-  // };
+  const logoutUser = async () => {
+    dispatch({ type: GET_LOGOUT_LOADING });
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/auth/logout`,
+        config
+      );
+      localStorage.removeItem("token");
+      toast("success", "Logged out successfully");
+      dispatch({ type: GET_LOGOUT_SUCCESS });
+      navigate("/");
+    } catch (error) {
+      console.log("Error while logging out:", error);
+      dispatch({ type: GET_LOGOUT_ERROR });
+      toast("error", "Something went wrong while logging out");
+    }
+  };
   return (
     <>
       <div className="min-h-full">
@@ -157,6 +153,7 @@ const EntireLayout = () => {
                                     {({ active }) => (
                                       <Link
                                         to={item.href}
+                                        onClick={logoutUser}
                                         className={classNames(
                                           active ? "bg-gray-100" : "",
                                           "block px-4 py-2 text-sm text-gray-700"

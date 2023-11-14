@@ -60,12 +60,12 @@ const endingPrompt = `stop the interview. And return the feedback object based o
   improvementAreas: [{ type: String }],
   overallScore: { type: Number },
 };
-Remember to only send the feedback object in and nothing else like a variable or something, you response should be something like "{"strengths:"["Good understanding of the concepts",...], "improvementAreas":["Could work on implementations",...],"overallScore":6.5}" , it should just be a strified object and nothing else
+Remember to only send the feedback object in and nothing else like a variable or something, you response should be something like "{"strengths:"["Good understanding of the concepts",...], "improvementAreas":["Could work on implementations",...],"overallScore":6.5}" , it should just be a strified object and nothing else.Don't even add symbols to your response in the end like ';' '.' etc, it should just be a a stringified JS object that I can perform JSON.parse on.
 `;
 
 exports.startInterview = async (req, res, next) => {
   let { type } = req.body;
-  // console.log(type);
+  console.log(type);
   // get first question from chatgpt
   try {
     const conversation = [{ role: "user", content: startingPrompts[type] }]; //Long prompt about the interview
@@ -81,11 +81,11 @@ exports.startInterview = async (req, res, next) => {
       user: req.userId,
       interviewType: type,
       videoPath: null,
-      conversation: [...conversation, { role: "assistant", content: question }],
+      conversation: [...conversation,{ role: "assistant", content: question }],
       feedback: null,
     });
     await newInterview.save();
-    console.log(newInterview);
+    // console.log(newInterview);
     res.status(200).json({
       messsage: "Interview started successfully",
       newInterview,
@@ -140,12 +140,17 @@ exports.endInterview = async (req, res, next) => {
   const { id } = req.params;
   //conversation = req.body
   const { conversation } = req.body;
-  //upload vod
+  const updatedConversation = JSON.parse(conversation);
+  const videoPath = req.file ? req.file.path : null;
+  console.log(videoPath);
   try {
     // send chat gpt the ending prompt with the entire conversation,=> feedback object
     const response = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
-      messages: [...conversation, { role: "user", content: endingPrompt }],
+      messages: [
+        ...updatedConversation,
+        { role: "user", content: endingPrompt },
+      ],
     });
     //extract teh object from api's response
     const ans = response.choices[0].message.content;
@@ -162,12 +167,12 @@ exports.endInterview = async (req, res, next) => {
     //   await Interview.findByIdAndUpdate({id}, { feedback: newFeedback._id});
     const updatedInterview = await Interview.findByIdAndUpdate(id, {
       feedback: newFeedback._id,
+      videoPath,
     });
-    console.log(updatedInterview);
+    // console.log(updatedInterview);
 
     //  const user= await User.findOne(req.userId);
     const loggedInUser = await User.findOne({ _id: userId });
-    console.log(loggedInUser.pastInterviews, "Past INterviews");
     //   await User.findByIdAndUpdate({req.userId}, { pastInterviews: [...user.pastInterviews, id]});
     const updatedUser = await User.findByIdAndUpdate(
       userId,
@@ -176,7 +181,7 @@ exports.endInterview = async (req, res, next) => {
       },
       { new: true }
     );
-    console.log(updatedUser);
+    // console.log(updatedUser);
 
     res
       .status(200)

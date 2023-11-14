@@ -84,46 +84,43 @@ const AudioToText: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="border-t-2 pt-8">
       <div>
-        <div>
-          {isListening ? <span>🎙️</span> : <span>🛑🎙️</span>}
-          <button
-            onClick={() => setIsListening(true)}
-            disabled={isListening}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Start
-          </button>
-          <span> </span>
-          <button
-            onClick={(e) => setIsListening(false)}
-            disabled={!isListening}
-            className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Stop
-          </button>
-          <span> </span>
-          <button
-            onClick={handleSend}
-            className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Send
-          </button>
-        </div>
+        <div className="flex items-center justify-between">
+          <div>
+            {isListening ? <span>🎙️</span> : <span>🛑🎙️</span>}
+            <button
+              onClick={() => setIsListening(true)}
+              disabled={isListening}
+              className="btn-outline"
+            >
+              Start
+            </button>{" "}
+            <span></span>
+            <button
+              onClick={(e) => setIsListening(false)}
+              disabled={!isListening}
+              className="btn-outline"
+            >
+              Stop
+            </button>
+          </div>
+
+          <button onClick={handleSend} className="btn">Send</button>
       </div>
       <br />
       <div>
-        <div>
-          <textarea
-            style={{ width: "400px", height: "100px" }}
-            value={value}
-            onChange={handleChange}
-          ></textarea>
-        </div>
-        <Speak value={latest}/>
+        <textarea
+          value={value}
+          onChange={handleChange}
+          className="block p-2.5 h-32 mb-4 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          
+          placeholder="Write your answers here..."
+        ></textarea>
+        <Speak value={latest ? latest : value} />
       </div>
     </div>
+  </div>
   );
 };
 
