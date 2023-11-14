@@ -93,5 +93,18 @@
     height: 18rem;
     border-radius: 5px;
   }
+  @media screen and (max-width:600px) {
+    .mediaquery{
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+    .mediaqueryInnerDiv1{
+      width: 100%;
+    }
+    .mediaqueryInnerDiv1p{
+      width: 95%;
+    }
+  }
 }
 

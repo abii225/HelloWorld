@@ -8,7 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { CHANGE_INTERVIEW_TYPE } from "../redux/interviewReducer/actionTypes";
 import { UserInterviews } from "./UserInterviews";
 import { Button } from "flowbite-react";
-import { UserAction } from "./UserAction";
+// import { UserAction } from "./UserAction";
 
 interface Course {
   id: number;
@@ -109,7 +109,7 @@ const Interviews = () => {
         </div>
 
         <div>
-          {selectedTab === 0 && <UserAction openModal={openModal} />}
+          {/* {selectedTab === 0 && <UserAction openModal={openModal} />} */}
           {selectedTab === 1 && <UserInterviews />}
         </div>
       </div>
