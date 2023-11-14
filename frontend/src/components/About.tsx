@@ -4,7 +4,6 @@ import EntireLayout from "./EntireLayout";
 const About = () => {
   return (
     <>
-      <EntireLayout />
       <div>About</div>
     </>
   );

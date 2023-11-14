@@ -5,8 +5,10 @@ import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { Modal } from "./Modal";
 import { Link } from "react-router-dom";
-import "../App.css";
-import profile from "./Images/1699708758159.png";
+ import "../App.css"
+ import profile from "./Images/1699708758159.png"
+import EntireLayout from "./EntireLayout";
+
 
 interface UserProfile {
   profilePicture: string;
@@ -67,21 +69,13 @@ const Dashboard: React.FC = () => {
       alert("Passwords do not match!");
       return;
     }
-
-    // Call the onEditProfile function with updated data
-    // onEditProfile({
-    //   ...userData,
-    //   username,
-    //   password: password !== "" ? password : userData.password, // Use existing password if not changed
-    // });
-
-    // Reset state and close the modal
     setIsEditing(false);
     closeModal();
   };
 
   return (
     <>
+    <EntireLayout />
       <button
         data-drawer-target="default-sidebar"
         data-drawer-toggle="default-sidebar"
@@ -108,11 +102,10 @@ const Dashboard: React.FC = () => {
 
       <aside
         id="default-sidebar"
-        className={`fixed top-0 left-0 z-40 w-64 h-screen transition-transform ${
+        className={`fixed top-0 left-0 z-40 w-64 h-screen transition-transform mt- ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         } sm:translate-x-0`}
-        aria-label="Sidebar"
-      >
+        aria-label="Sidebar">
         <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50">
           <ul className="space-y-2 font-medium">
             <li
@@ -186,37 +179,11 @@ const Dashboard: React.FC = () => {
         {/* Additional conditional rendering based on the selected menu item */}
       </div>
       <div>
-        {/* <Modal isOpen={isModalOpen} onClose={closeModal}>
 
-            <div style={{width:"400px",display:'flex',flexDirection:"column", gap:"10px",padding:"10px"}}>
-              <label >Username</label>
-              <input placeholder="Edit Username" style={{border:"1px solid black", padding:"5px",borderRadius:"5px"}}/>
-              <label >New Password</label>
-              <input placeholder="Edit Password" style={{border:"1px solid black", padding:"5px",borderRadius:"5px"}}/>
-              <label >Confirm Password</label>
-              <input placeholder="Confirm Password" style={{border:"1px solid black", padding:"5px",borderRadius:"5px"}}/>
-              <label> Bio</label>
-              <input placeholder="Edit Profile Bio" style={{border:"1px solid black", padding:"5px",borderRadius:"5px"}}/>
-            </div>
-          
-           <div style={{marginLeft:"30%",marginTop:"10px"}}>
-              <Link to="/"><button className="btn">Edit Profile</button></Link>
-           </div>
-          </Modal> */}
-        <Modal
-          isOpen={isModalOpen}
-          onClose={closeModal}
-          // contentLabel="Profile Modal"
-          // className="profile-modal"
-          // overlayClassName="profile-modal-overlay"
-        >
-          <div className="profile-container">
-            <div className="profile-image">
-              <img
-                src={loggedInUser?.profileImage}
-                alt="Profile"
-                style={{ borderRadius: "50%" }}
-              />
+         
+          <Modal
+            isOpen={isModalOpen}
+            onClose={closeModal}>
             </div>
             <div className="profile-data">
               <h1>User Details</h1>

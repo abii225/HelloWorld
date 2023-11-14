@@ -1,14 +1,12 @@
-
 import {AiOutlineCheck} from "react-icons/ai"
-import EntireLayout from "./EntireLayout"
 import { Link, useNavigate } from "react-router-dom"
 const Home = () => {
   const nav=useNavigate();
   return (
-<div>
-  <EntireLayout />
+<div style={{position:"absolute"}}>
   {/* 1rd row............... */}
-    <div className="flex justify-center w-11/12 m-[auto] mt-[3rem] ">
+
+    <div className="flex justify-center w-11/12 m-[auto]">
         <div className="w-[46%] flex flex-col text-center mr-[5rem]" style={{alignItems:"center"}}>
             <h2 className="text-3xl text-center w-3/4 mt-[1.6rem] font-bold" ><b style={{color:"rgb(0,168,132)"}}>Intellibot.</b>  End-to-End AI Video Interview Software</h2>
             <h4 className=" text-justify mt-[20px] mb-[20px]" style={{lineHeight:"2"}}>Intellibot is all about efficiency. It’s a state-of-the-art video recruiting software that uses Explainable AI to pre-screen and shortlist candidates, bringing the best talent out there for the role you’re looking for. Our online smart video interview software cuts the time of unnecessary pre-interviews, giving you more time to focus on what’s really important – your company. Our software is powered by top-notch AI hiring technology, analyzing key factors of potential candidates, including psychological and technical aspects.</h4>
