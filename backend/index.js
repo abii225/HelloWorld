@@ -6,6 +6,7 @@ const cors = require("cors");
 const connection = require("./connection");
 const authRoutes = require("./routes/auth.routes");
 const interviewRoutes = require("./routes/interview.routes");
+const userRoutes =require("./routes/user.routes")
 
 app.use(express.json());
 app.use(cors());
@@ -13,6 +14,7 @@ app.use(cors());
 // All Routes
 app.use("/auth", authRoutes);
 app.use(interviewRoutes);
+app.use("/user",userRoutes)
 
 app.use((req, res, next) => {
   res.send("<h1>404 Not found</h1>");

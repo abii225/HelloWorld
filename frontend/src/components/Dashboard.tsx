@@ -3,16 +3,45 @@ import Interviews from "./Interviews";
 import About from "./About";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
+import { Modal } from "./Modal";
+import { Link } from "react-router-dom";
+ import "../App.css"
+ import profile from "./Images/1699708758159.png"
+
+interface UserProfile {
+  profilePicture: string;
+  name: string;
+  username: string;
+  email: string;
+  bio: string;
+  password: string;
+}
+
+interface ProfileModalProps {
+  isOpen: boolean;
+  closeModal: () => void;
+  userData: UserProfile;
+  onEditProfile: (updatedData: UserProfile) => void;
+}
 
 const Dashboard: React.FC = () => {
-  const loggedInUser = useSelector(
-    (store: RootState) => store.authReducer.loggedInUser
-  );
+
+  const loggedInUser = useSelector( (store: RootState) => store.authReducer.loggedInUser);
   console.log(loggedInUser);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeMenuItem, setActiveMenuItem] = useState<
     "roadmaps" | "interviews"
   >("interviews");
+  
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  const openModal = (): void => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = (): void => {
+    setIsModalOpen(false);
+  };
 
   const toggleSidebar = () => {
     setIsSidebarOpen((prevState) => !prevState);
@@ -20,6 +49,34 @@ const Dashboard: React.FC = () => {
 
   const closeSidebar = () => {
     setIsSidebarOpen((prevState) => !prevState);
+  };
+
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
+
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleSaveClick = () => {
+    // Perform validation (e.g., check if passwords match)
+    if (password !== confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+
+    // Call the onEditProfile function with updated data
+    // onEditProfile({
+    //   ...userData,
+    //   username,
+    //   password: password !== "" ? password : userData.password, // Use existing password if not changed
+    // });
+
+    // Reset state and close the modal
+    setIsEditing(false);
+    closeModal();
   };
 
   return (
@@ -103,6 +160,19 @@ const Dashboard: React.FC = () => {
               ></svg>
               <span className="ms-3">Roadmaps</span>
             </li>
+            <li
+              className={`flex items-center p-2 text-gray-900 rounded-lg hover:bg-purple-100 group `}
+              onClick={openModal}
+            >
+              <svg
+                className="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 "
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 22 21"
+              ></svg>
+              <span className="ms-3">Profile</span>
+            </li>
             {/* Additional list items based on your HTML structure */}
           </ul>
         </div>
@@ -114,6 +184,60 @@ const Dashboard: React.FC = () => {
         {activeMenuItem === "roadmaps" && <About />}
         {/* Additional conditional rendering based on the selected menu item */}
       </div>
+      <div>
+          {/* <Modal isOpen={isModalOpen} onClose={closeModal}>
+
+            <div style={{width:"400px",display:'flex',flexDirection:"column", gap:"10px",padding:"10px"}}>
+              <label >Username</label>
+              <input placeholder="Edit Username" style={{border:"1px solid black", padding:"5px",borderRadius:"5px"}}/>
+              <label >New Password</label>
+              <input placeholder="Edit Password" style={{border:"1px solid black", padding:"5px",borderRadius:"5px"}}/>
+              <label >Confirm Password</label>
+              <input placeholder="Confirm Password" style={{border:"1px solid black", padding:"5px",borderRadius:"5px"}}/>
+              <label> Bio</label>
+              <input placeholder="Edit Profile Bio" style={{border:"1px solid black", padding:"5px",borderRadius:"5px"}}/>
+            </div>
+          
+           <div style={{marginLeft:"30%",marginTop:"10px"}}>
+              <Link to="/"><button className="btn">Edit Profile</button></Link>
+           </div>
+          </Modal> */}
+          <Modal
+            isOpen={isModalOpen}
+            onClose={closeModal}
+      // contentLabel="Profile Modal"
+            // className="profile-modal"
+      // overlayClassName="profile-modal-overlay"
+    >
+      <div className="profile-container">
+        <div className="profile-image">
+          <img src={profile} alt="Profile" style={{borderRadius:"50%"}}/>
+        </div>
+        <div className="profile-data">
+          <h1 style={{textAlign:"center"}}>User Details</h1>
+          <p style={{display:"flex",flexDirection:"column"}}> Username: {isEditing ? <input value={username} onChange={(e) => setUsername(e.target.value)} /> : "Jahir Pendhari"}</p>
+          {/* <p>Email: {"jahirpp1999@gmail.com"}</p> */}
+          <p style={{display:"flex",flexDirection:"column"}}>Email: {isEditing ? <input value={username} onChange={(e) => setUsername(e.target.value)} /> : "jahirpp1999@gmail.com"}</p>
+          {/* <p>Bio: {"I'am Jahir Pendhari"}</p> */}
+          <p style={{display:"flex",flexDirection:"column"}}>Bio: {isEditing ? <input value={username} onChange={(e) => setUsername(e.target.value)} /> : "I'am Jahir Pendhari"}</p>
+
+          {isEditing && (
+            <div style={{display:"flex", flexDirection:"column"}}>
+              <label>New Password:</label>
+              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}  style={{padding: "5px",border: "1px solid black",borderRadius: "5px",paddingLeft:"10px"}} />
+
+              <label>Confirm Password:</label>
+              <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}  style={{padding: "5px",border: "1px solid black",borderRadius: "5px",paddingLeft:"10px"}} />
+            </div>
+          )}
+
+          <button onClick={isEditing ? handleSaveClick : handleEditClick} className="btn">
+            {isEditing ? "Save" : "Edit Profile"}
+          </button>
+        </div>
+      </div>
+    </Modal>
+       </div>
     </>
   );
 };
