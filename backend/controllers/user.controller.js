@@ -64,41 +64,41 @@ exports.updateUser = async (req, res, next) => {
 
 exports.getLeaderboard = async (req, res, next) => {
   try {
-    // Retrieve data from the database for all users
-    const leaderboardData = await Promise.all(
-      (
-        await User.find()
-      ).flatMap(async (user) => {
-        const bestInterview = await Promise.all(
-          user.pastInterviews.map(async (interview) => {
-            const feedback = await Feedback.findById(interview.feedback);
+    const users = await User.find();
 
-            return {
-              userId: user._id,
-              username: user.username,
-              profileImage: user.profileImage,
-              overallScore: feedback ? feedback.overallScore : 0,
-            };
-          })
-        );
+    const leaderboardData = [];
 
-        return bestInterview;
-      })
-    );
+    for (const user of users) {
+      const pastInterviews = user.pastInterviews || [];
+      let highestScore = 0;
 
-    // Flatten the array of arrays
-    const flattenedLeaderboardData = leaderboardData.flat();
+      for (const interviewId of pastInterviews) {
+        const interview = await Interview.findById(interviewId);
+        if (interview) {
+          const feedback = await Feedback.findById(interview.feedback);
+
+          if (feedback && feedback.overallScore > highestScore) {
+            highestScore = feedback.overallScore;
+          }
+        }
+      }
+
+      leaderboardData.push({
+        userId: user._id,
+        username: user.username,
+        profileImage: user.profileImage,
+        overallScore: highestScore,
+      });
+    }
 
     // Sort the data by overallScore in descending order
-    flattenedLeaderboardData.sort((a, b) => b.overallScore - a.overallScore);
+    leaderboardData.sort((a, b) => b.overallScore - a.overallScore);
 
     // Add a rank to each entry
-    const leaderboardWithRank = flattenedLeaderboardData.map(
-      (entry, index) => ({
-        ...entry,
-        rank: index + 1,
-      })
-    );
+    const leaderboardWithRank = leaderboardData.map((entry, index) => ({
+      ...entry,
+      rank: index + 1,
+    }));
 
     console.log(leaderboardWithRank);
     res.status(200).json({

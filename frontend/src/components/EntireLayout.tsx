@@ -85,29 +85,38 @@ const EntireLayout = () => {
   return (
     <>
       <div className="min-h-full mb-[1rem]">
-        <Disclosure as="nav" className="bgcolor" style={{width: "100%"}}>
+        <Disclosure as="nav" className="bgcolor" style={{ width: "100%" }}>
           {({ open }) => (
             <>
               <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div
                   className="flex h-16 items-center justify-between"
-                  style={{ marginLeft: "24rem" }}
+                  // style={{ marginLeft: "24rem" }}
                 >
+                  <div className="mb-6 md:mb-0">
+                    <a
+                      href="https://flowbite.com/"
+                      className="flex items-center"
+                    >
+                      <img
+                        src="https://flowbite.com/docs/images/logo.svg"
+                        className="h-8 me-3"
+                        alt="FlowBite Logo"
+                      />
+                      <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+                        Intellibot
+                      </span>
+                    </a>
+                  </div>
                   <div className="flex items-center">
-                    <div className="flex-shrink-0">
-                      {/* <img
-                            className="h-8 w-8"
-                            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                            alt="Your Company"
-                          /> */}
-                    </div>
                     <div className="hidden md:block">
                       <div className="ml-10 flex items-baseline space-x-4 cursor-pointer">
                         {navigation.map((item) => (
                           <Link
                             key={item.name}
                             to={item.href}
-                            className="rounded-md px-3 py-2 text-lg font-small transition-colors hover:text-green-500">
+                            className="rounded-md px-3 py-2 text-lg font-small transition-colors hover:text-green-500"
+                          >
                             {item.name}
                           </Link>
                         ))}
@@ -216,9 +225,9 @@ const EntireLayout = () => {
                           : "text-gray-300 hover:bg-gray-700 hover:text-white",
                         "block rounded-md px-3 py-2 text-base font-medium"
                       )}
-                      aria-current={item.current ? "page" : undefined}>
+                      aria-current={item.current ? "page" : undefined}
+                    >
                       {item.name}
-                      
                     </Link>
                   ))}
                 </div>

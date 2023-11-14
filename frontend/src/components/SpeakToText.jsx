@@ -7,7 +7,7 @@ export const SpeakToText = ({ value }) => {
   const { speak, voices } = useSpeechSynthesis();
 
   const [voiceType, setVoiceType] = useState("female");
-  const [voiceSpeed, setVoiceSpeed] = useState(1);
+  const [voiceSpeed, setVoiceSpeed] = useState(1.5);
 
   useEffect(() => {
     let selectedVoice;
@@ -23,7 +23,7 @@ export const SpeakToText = ({ value }) => {
       voice: selectedVoice,
       rate: voiceSpeed,
     });
-  }, [latest, voiceType, voiceSpeed]);
+  }, [latest]);
 
   return (
     <div>
