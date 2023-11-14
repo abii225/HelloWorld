@@ -35,8 +35,6 @@ const Interviews = () => {
   const handleTabChange = (index: number) => {
     setSelectedTab(index);
   };
-
-
   
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
