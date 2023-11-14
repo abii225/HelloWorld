@@ -56,18 +56,21 @@ exports.loginUser = async (req, res, next) => {
     const user = await User.findOne({ email });
     if (user) {
       bcrypt.compare(password, user.password, function (err, result) {
-        if (err) {
+        if (result) {
+          var token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY);
+          res
+            .status(200)
+            .json({
+              message: `Welcome back ${user.name}`,
+              token: token,
+              user: user,
+            });
+         
+        }else{
           return res
-            .status(400)
-            .json({ message: "Invalid password,Try again" });
+          .status(400)
+          .json({ message: "Invalid password,Try again" });
         }
-
-        var token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY);
-        res.status(200).json({
-          message: `Welcome back ${user.name}`,
-          token: token,
-          user: user,
-        });
       });
     } else {
       return res

@@ -8,4 +8,7 @@ router.use(auth);
 // /interview/:id (GET to retrieve details of a specific interview)
 router.get("/user/interview", userController.getUserInterviews);
 
+//* PATCH-> '/auth/signup' to login a user
+router.patch("/user/update/:id", userController.updateUser);
+
 module.exports = router;
