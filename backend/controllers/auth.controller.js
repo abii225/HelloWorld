@@ -63,13 +63,11 @@ exports.loginUser = async (req, res, next) => {
         }
 
         var token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY);
-        res
-          .status(200)
-          .json({
-            message: `Welcome back ${user.name}`,
-            token: token,
-            user: user,
-          });
+        res.status(200).json({
+          message: `Welcome back ${user.name}`,
+          token: token,
+          user: user,
+        });
       });
     } else {
       return res

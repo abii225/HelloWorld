@@ -8,6 +8,7 @@ import {
   POST_ENDINTERVIEW_ERROR,
   POST_ENDINTERVIEW_LOADING,
   POST_ENDINTERVIEW_SUCCESS,
+  CHANGE_INTERVIEW_TYPE,
 } from "./actionTypes";
 interface Action {
   type: string;
@@ -19,19 +20,23 @@ interface Message {
 }
 
 interface State {
+  isPageLoading: boolean;
   isLoading: boolean;
   isError: boolean;
   interviewId: string; //id of the interview going on
   conversation: []; //to display on the screen
   latest: string;
+  type: string;
 }
 
 const initState: State = {
+  isPageLoading: false,
   isLoading: false,
   isError: false,
   interviewId: "",
   conversation: [],
   latest: "",
+  type: "",
 };
 
 export const reducer = (state: State = initState, action: Action): State => {
@@ -39,26 +44,34 @@ export const reducer = (state: State = initState, action: Action): State => {
     case POST_STARTINTERVIEW_LOADING:
       return {
         ...state,
-        isLoading: true,
+        isPageLoading: true,
       };
     case POST_STARTINTERVIEW_ERROR:
       return {
         ...state,
         isError: true,
         isLoading: false,
+        isPageLoading: false,
       };
     case POST_STARTINTERVIEW_SUCCESS:
       return {
         ...state,
+        isPageLoading: false,
         isError: false,
         isLoading: false,
         interviewId: action.payload.newInterview._id,
         conversation: action.payload.newInterview.conversation,
-        latest: action.payload.latest,//first question
+        latest: action.payload.latest, //first question
+      };
+    case PATCH_ANSWER_LOADING:
+      return {
+        ...state,
+        isLoading: true,
       };
     case PATCH_ANSWER_ERROR:
       return {
         ...state,
+        isLoading: false,
         isError: true,
       };
     case PATCH_ANSWER_SUCCESS:
@@ -74,10 +87,15 @@ export const reducer = (state: State = initState, action: Action): State => {
         ...state,
       };
     case POST_ENDINTERVIEW_LOADING:
-      return { ...state, isLoading: true };
+      return { ...state, isPageLoading: true };
     case POST_ENDINTERVIEW_SUCCESS:
       return {
         ...initState,
+      };
+    case CHANGE_INTERVIEW_TYPE:
+      return {
+        ...state,
+        type: action.payload,
       };
     default:
       return state;

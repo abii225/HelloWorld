@@ -1,0 +1,11 @@
+const express = require("express");
+const router = express.Router();
+
+const auth = require("../middlewares/auth.middleware");
+const userController = require("../controllers/user.controller");
+
+router.use(auth);
+// /interview/:id (GET to retrieve details of a specific interview)
+router.get("/user/interview", userController.getUserInterviews);
+
+module.exports = router;

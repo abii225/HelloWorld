@@ -1,4 +1,4 @@
-import React, { useState,useEffect, ChangeEvent } from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 import { RootState } from "../redux/store";
 import { useSelector } from "react-redux";
 
@@ -7,7 +7,9 @@ interface SpeakProps {
 }
 
 const Speak: React.FC<SpeakProps> = ({ value }) => {
-  const latest = useSelector((store:RootState) => store.interviewReducer.latest);
+  const latest = useSelector(
+    (store: RootState) => store.interviewReducer.latest
+  );
 
   const [voiceType, setVoiceType] = useState<string>("female");
   const [voiceSpeed, setVoiceSpeed] = useState<number>(1);
@@ -34,26 +36,30 @@ const Speak: React.FC<SpeakProps> = ({ value }) => {
     setVoiceSpeed(parseFloat(e.target.value));
   };
   useEffect(() => {
-    // speak({ text: latest });
+    speak();
   }, [latest]);
 
   return (
     <div>
-      <select value={voiceType} onChange={handleVoiceTypeChange}>
+      <select
+        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 inline-block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mr-4"
+        value={voiceType}
+        onChange={handleVoiceTypeChange}
+      >
         <option value="" disabled>
           Select Voice Type
         </option>
         <option value="male">Male</option>
         <option value="female">Female</option>
       </select>
-      <select value={voiceSpeed} onChange={handleVoiceSpeedChange}>
+      <select className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 inline-block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mr-4" value={voiceSpeed} onChange={handleVoiceSpeedChange}>
         <option value="" disabled>
           Select Voice Speed
         </option>
-        <option value="0.5">0.5</option>
-        <option value="1">1</option>
-        <option value="1.5">1.5</option>
-        <option value="2">2</option>
+        <option value="0.5">x0.5</option>
+        <option value="1">x1</option>
+        <option value="1.5">x1.5</option>
+        <option value="2">x2</option>
       </select>
       <button
         onClick={speak}

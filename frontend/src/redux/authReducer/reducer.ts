@@ -11,7 +11,10 @@ import {
   GET_LOGGEDUSER_ERROR,
   GET_LOGGEDUSER_LOADING,
   GET_LOGGEDUSER_SUCCESS,
-  PATCH_LOGGEDUSER_SUCCESS
+  PATCH_LOGGEDUSER_SUCCESS,
+  GET_USERINTERVIEWS_ERROR,
+  GET_USERINTERVIEWS_LOADING,
+  GET_USERINTERVIEWS_SUCCESS,
 } from "./actionTypes";
 import { Action } from "./types"; // Define your types as needed
 
@@ -21,6 +24,7 @@ interface State {
   isAuth: boolean;
   token: string | null;
   loggedInUser: any | null;
+  userInterviews: [];
 }
 
 const initState: State = {
@@ -29,6 +33,7 @@ const initState: State = {
   isAuth: false,
   token: null,
   loggedInUser: null,
+  userInterviews: [],
 };
 
 export const reducer = (state: State = initState, action: Action): State => {
@@ -97,8 +102,27 @@ export const reducer = (state: State = initState, action: Action): State => {
     case PATCH_LOGGEDUSER_SUCCESS:
       return {
         ...state,
-        loggedInUser: action.payload
-      }
+        loggedInUser: action.payload,
+      };
+    case GET_USERINTERVIEWS_LOADING:
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case GET_USERINTERVIEWS_ERROR:
+      return {
+        ...state,
+        isLoading: false,
+        isError: true,
+      };
+    case GET_USERINTERVIEWS_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        userInterviews: action.payload,
+      };
+    
     default:
       return state;
   }
