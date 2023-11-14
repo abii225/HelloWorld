@@ -1,5 +1,4 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
-import { Speak } from "./Speak";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import {
@@ -8,6 +7,7 @@ import {
   PATCH_ANSWER_SUCCESS,
 } from "../redux/interviewReducer/actionTypes";
 import axios from "axios";
+import { Speak } from "./Speak";
 
 const SpeechRecognition =
   (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
@@ -17,32 +17,24 @@ mic.continuous = true;
 mic.interimResults = true;
 mic.lang = "en-US";
 
-interface myConversation {
-  user: string;
-  bot?: string;
-}
-interface userConversation {
-  username: String;
-  password: String;
-  email: String;
-}
 
 const AudioToText: React.FC = () => {
+
   const dispatch = useDispatch();
   const token = useSelector((store: RootState) => store.authReducer.token);
   const { isLoading, isError, interviewId, conversation, latest } = useSelector(
     (store: RootState) => store.interviewReducer
   );
-  console.log(latest, "AUDIO component");
+
+  // console.log(latest, "AUDIO component");
   const [isListening, setIsListening] = useState(false);
   const [value, setValue] = useState<string>("");
   const [render, setRender] = useState(false);
 
-  const [conversationArr, setConversationArr] = useState<string[]>([]);
 
   useEffect(() => {
     handleListen();
-  }, [isListening, conversationArr, render]);
+  }, [isListening, render]);
 
   const handleListen = () => {
     if (isListening) {
@@ -81,7 +73,9 @@ const AudioToText: React.FC = () => {
       console.log(e);
       dispatch({ type: PATCH_ANSWER_ERROR });
       setValue("");
+      
     }
+    setRender(!render)
   };
 
   const handleStart = () => {};
@@ -100,8 +94,8 @@ const AudioToText: React.FC = () => {
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           >
             Start
-          </button>{" "}
-          <span></span>
+          </button>
+          <span> </span>
           <button
             onClick={(e) => setIsListening(false)}
             disabled={!isListening}
@@ -127,15 +121,8 @@ const AudioToText: React.FC = () => {
             onChange={handleChange}
           ></textarea>
         </div>
-        <Speak value={latest ? latest : value} />
+        <Speak value={latest}/>
       </div>
-      {conversationArr?.map((item, i) => {
-        return (
-          <div key={i}>
-            <p>{item}</p>
-          </div>
-        );
-      })}
     </div>
   );
 };
